@@ -1,20 +1,20 @@
 import streamlit as st
 import pandas as pd
 import joblib
- 
- 
+
+
 # =========================================================
 # PAGE CONFIGURATION
 # =========================================================
- 
+
 st.set_page_config(
     page_title="EcoTrack | E-Waste Intelligence",
     page_icon="♻️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
- 
- 
+
+
 # =========================================================
 # DESIGN SYSTEM (CSS)
 # Palette:
@@ -26,12 +26,12 @@ st.set_page_config(
 #   Canvas    #F1F5F9  (page background)
 #   Ink       #0F172A / Slate #475569 (text)
 # =========================================================
- 
+
 st.markdown(
     """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
- 
+
     :root {
         --navy: #0B1020;
         --indigo-900: #1E1B4B;
@@ -51,7 +51,7 @@ st.markdown(
         --shadow-sm: 0 1px 2px rgba(15,23,42,0.04), 0 4px 12px rgba(15,23,42,0.05);
         --shadow-md: 0 10px 30px rgba(15,23,42,0.10);
     }
- 
+
     @keyframes fadeUp {
         from {opacity: 0; transform: translateY(14px);}
         to   {opacity: 1; transform: translateY(0);}
@@ -74,11 +74,11 @@ st.markdown(
         0%, 100% {box-shadow: 0 14px 34px rgba(15,23,42,0.22);}
         50%      {box-shadow: 0 14px 48px rgba(15,23,42,0.38);}
     }
- 
+
     html, body, [class*="css"], .stApp {
         font-family: 'Inter', sans-serif;
     }
- 
+
     /* ---------- Canvas with soft gradient mesh ---------- */
     .stApp {
         background:
@@ -99,11 +99,11 @@ st.markdown(
     }
     #MainMenu, footer {visibility: hidden;}
     header[data-testid="stHeader"] {background: transparent;}
- 
+
     ::-webkit-scrollbar {width: 10px; height: 10px;}
     ::-webkit-scrollbar-thumb {background: #CBD5E1; border-radius: 10px;}
     ::-webkit-scrollbar-thumb:hover {background: #94A3B8;}
- 
+
     /* ---------- Sidebar ---------- */
     section[data-testid="stSidebar"] {
         background:
@@ -169,7 +169,7 @@ st.markdown(
     .side-brand .tag {
         font-size: 0.78rem; opacity: 0.7; margin-top: 2px;
     }
- 
+
     /* ---------- Hero ---------- */
     .hero {
         position: relative;
@@ -236,7 +236,7 @@ st.markdown(
         font-size: 1.05rem; line-height: 1.6;
         color: #CBD5E1 !important;
     }
- 
+
     /* ---------- Section titles ---------- */
     .section-title {
         display: flex; align-items: center; gap: 0.7rem;
@@ -255,7 +255,7 @@ st.markdown(
         flex: 1; height: 1px;
         background: linear-gradient(90deg, rgba(15,23,42,0.14), transparent);
     }
- 
+
     /* ---------- KPI cards ---------- */
     .kpi-card {
         position: relative; overflow: hidden;
@@ -302,7 +302,7 @@ st.markdown(
         color: var(--ink) !important;
         margin-top: 0.15rem; margin-bottom: 0.3rem;
     }
- 
+
     /* ---------- Feature cards ---------- */
     .info-card {
         position: relative; overflow: hidden;
@@ -333,7 +333,7 @@ st.markdown(
         margin: 0; font-size: 0.93rem; line-height: 1.6;
         color: var(--slate) !important;
     }
- 
+
     /* ---------- Insight rows ---------- */
     .insight {
         background: linear-gradient(90deg, color-mix(in srgb, var(--accent, #10B981) 10%, white), #FFFFFF 70%);
@@ -351,7 +351,7 @@ st.markdown(
         box-shadow: var(--shadow-md);
     }
     .insight b { color: var(--accent, #047857) !important; }
- 
+
     /* ---------- Tech badges ---------- */
     .badge {
         display: inline-block;
@@ -370,7 +370,7 @@ st.markdown(
         border-color: var(--emerald);
         box-shadow: 0 10px 22px rgba(16,185,129,0.25);
     }
- 
+
     /* ---------- Chart containers ---------- */
     div[data-testid="stVerticalBlockBorderWrapper"] {
         background: var(--card);
@@ -383,7 +383,7 @@ st.markdown(
     div[data-testid="stVerticalBlockBorderWrapper"]:hover {
         box-shadow: var(--shadow-md);
     }
- 
+
     /* ---------- Inputs ---------- */
     div[data-baseweb="input"], div[data-baseweb="base-input"] {
         border-radius: 12px !important;
@@ -392,7 +392,7 @@ st.markdown(
         border-color: var(--emerald) !important;
         box-shadow: 0 0 0 3px rgba(16,185,129,0.20);
     }
- 
+
     /* ---------- Risk result ---------- */
     .risk-box {
         text-align: center;
@@ -406,7 +406,7 @@ st.markdown(
     .risk-low    { background: linear-gradient(135deg, #047857, #34D399); }
     .risk-medium { background: linear-gradient(135deg, #B45309, #FBBF24); }
     .risk-high   { background: linear-gradient(135deg, #991B1B, #FB7185); }
- 
+
     /* ---------- Buttons ---------- */
     div.stButton > button {
         background: linear-gradient(90deg, #10B981, #06B6D4);
@@ -421,7 +421,7 @@ st.markdown(
         box-shadow: 0 16px 32px rgba(6,182,212,0.45);
         color: #04120D !important;
     }
- 
+
     /* ---------- Fixed footer (never scrolls) ---------- */
     .footer {
         position: fixed;
@@ -465,12 +465,12 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
- 
- 
+
+
 # =========================================================
 # HELPER FUNCTIONS
 # =========================================================
- 
+
 def hero(tag, title, subtitle):
     st.markdown(
         f"""
@@ -483,15 +483,15 @@ def hero(tag, title, subtitle):
         """,
         unsafe_allow_html=True
     )
- 
- 
+
+
 def section(title):
     st.markdown(
         f'<div class="section-title">{title}</div>',
         unsafe_allow_html=True
     )
- 
- 
+
+
 def kpi(icon, label, value, accent="#10B981"):
     st.markdown(
         f"""
@@ -503,8 +503,8 @@ def kpi(icon, label, value, accent="#10B981"):
         """,
         unsafe_allow_html=True
     )
- 
- 
+
+
 def info_card(accent, title, text):
     st.markdown(
         f"""
@@ -515,40 +515,40 @@ def info_card(accent, title, text):
         """,
         unsafe_allow_html=True
     )
- 
- 
+
+
 def insight(accent, text):
     st.markdown(
         f'<div class="insight" style="--accent:{accent};">{text}</div>',
         unsafe_allow_html=True
     )
- 
- 
+
+
 def chart_title(text):
     st.markdown(
         f'<div class="chart-title">{text}</div>',
         unsafe_allow_html=True
     )
- 
- 
+
+
 # =========================================================
 # LOAD DATASET
 # =========================================================
- 
+
 @st.cache_data
 def load_data():
     return pd.read_csv(
         "data/processed/ewaste_cleaned.csv"
     )
- 
- 
+
+
 df = load_data()
- 
- 
+
+
 # =========================================================
 # SIDEBAR
 # =========================================================
- 
+
 st.sidebar.markdown(
     """
     <div class="side-brand">
@@ -559,9 +559,9 @@ st.sidebar.markdown(
     """,
     unsafe_allow_html=True
 )
- 
+
 st.sidebar.markdown("---")
- 
+
 page = st.sidebar.radio(
     "🧭 Navigation",
     [
@@ -573,14 +573,14 @@ page = st.sidebar.radio(
         "💡 Insights"
     ]
 )
- 
- 
+
+
 # =========================================================
 # HOME
 # =========================================================
- 
+
 if page == "🏠 Home":
- 
+
     hero(
         "DATA-DRIVEN SUSTAINABILITY",
         "♻️ EcoTrack",
@@ -588,27 +588,27 @@ if page == "🏠 Home":
         "Analyze generation, collection, recycling, disposal and hazardous "
         "materials using data analytics and machine learning."
     )
- 
+
     section("Dataset at a Glance")
- 
+
     col1, col2, col3, col4 = st.columns(4)
- 
+
     with col1:
         kpi("📋", "Total Records", f"{len(df):,}", "#10B981")
- 
+
     with col2:
         kpi("📱", "Device Types", f"{df['Device_Type'].nunique()}", "#0EA5E9")
- 
+
     with col3:
         kpi("🏙️", "Cities Covered", f"{df['City'].nunique()}", "#F59E0B")
- 
+
     with col4:
         kpi("📅", "Financial Years", f"{df['Financial_Year'].nunique()}", "#6366F1")
- 
+
     section("Project Modules")
- 
+
     col1, col2, col3 = st.columns(3)
- 
+
     with col1:
         info_card(
             "#10B981",
@@ -616,7 +616,7 @@ if page == "🏠 Home":
             "Explore e-waste generation across devices, cities, "
             "recycling performance and hazardous materials."
         )
- 
+
     with col2:
         info_card(
             "#0EA5E9",
@@ -624,7 +624,7 @@ if page == "🏠 Home":
             "Estimate future e-waste generation using a "
             "Linear Regression model."
         )
- 
+
     with col3:
         info_card(
             "#F59E0B",
@@ -632,9 +632,9 @@ if page == "🏠 Home":
             "Classify e-waste management risk as Low, Medium "
             "or High using a KNN classifier."
         )
- 
+
     section("Technology Stack")
- 
+
     st.markdown(
         """
         <span class="badge">🐍 Python</span>
@@ -646,92 +646,92 @@ if page == "🏠 Home":
         """,
         unsafe_allow_html=True
     )
- 
- 
+
+
 # =========================================================
 # DASHBOARD
 # =========================================================
- 
+
 elif page == "📊 Dashboard":
- 
+
     hero(
         "OVERVIEW",
         "📊 EcoTrack Dashboard",
         "A consolidated view of the analyzed e-waste dataset."
     )
- 
+
     total_records = len(df)
- 
+
     total_ewaste = df["E_Waste_kg"].sum()
- 
+
     total_collected = df["Collected_kg"].sum()
- 
+
     total_recycled = df["Recycled_kg"].sum()
- 
+
     recycling_rate = (
         total_recycled / total_ewaste * 100
         if total_ewaste > 0
         else 0
     )
- 
+
     col1, col2, col3, col4 = st.columns(4)
- 
+
     with col1:
         kpi("📋", "Records", f"{total_records:,}", "#6366F1")
- 
+
     with col2:
         kpi("♻️", "E-Waste", f"{total_ewaste:,.0f} kg", "#10B981")
- 
+
     with col3:
         kpi("📦", "Collected", f"{total_collected:,.0f} kg", "#0EA5E9")
- 
+
     with col4:
         kpi("🔄", "Recycling", f"{recycling_rate:.2f}%", "#F59E0B")
- 
+
     section("E-Waste Generation Trend")
- 
+
     yearly = (
         df.groupby("Financial_Year")["E_Waste_kg"]
         .sum()
     )
- 
+
     with st.container(border=True):
         st.line_chart(yearly, color="#10B981")
- 
+
     col1, col2 = st.columns(2)
- 
+
     with col1:
- 
+
         section("E-Waste by Device")
- 
+
         device_data = (
             df.groupby("Device_Type")["E_Waste_kg"]
             .sum()
             .sort_values(ascending=False)
         )
- 
+
         with st.container(border=True):
             st.bar_chart(device_data, color="#0EA5E9")
- 
+
     with col2:
- 
+
         section("E-Waste by City")
- 
+
         city_data = (
             df.groupby("City")["E_Waste_kg"]
             .sum()
             .sort_values(ascending=False)
         )
- 
+
         with st.container(border=True):
             st.bar_chart(city_data, color="#6366F1")
- 
+
     section("Recycling vs Disposal")
- 
+
     recycled = df["Recycled_kg"].sum()
- 
+
     disposed = df["Disposed_kg"].sum()
- 
+
     recycling_disposal = pd.DataFrame(
         {
             "Category": [
@@ -744,120 +744,120 @@ elif page == "📊 Dashboard":
             ]
         }
     )
- 
+
     with st.container(border=True):
         st.bar_chart(
             recycling_disposal.set_index("Category"),
             color="#14B8A6"
         )
- 
- 
+
+
 # =========================================================
 # E-WASTE ANALYSIS
 # =========================================================
- 
+
 elif page == "📈 E-Waste Analysis":
- 
+
     hero(
         "DEEP DIVE",
         "📈 E-Waste Analysis",
         "Detailed analysis of e-waste generation, recycling and hazardous materials."
     )
- 
+
     section("Device-wise E-Waste")
- 
+
     device_data = (
         df.groupby("Device_Type")["E_Waste_kg"]
         .sum()
         .sort_values(ascending=False)
     )
- 
+
     with st.container(border=True):
         st.bar_chart(device_data, color="#0EA5E9")
- 
+
     insight(
         "#0EA5E9",
         f"📱 Highest e-waste generating device: "
         f"<b>{device_data.idxmax()}</b>"
     )
- 
+
     section("City-wise E-Waste")
- 
+
     city_data = (
         df.groupby("City")["E_Waste_kg"]
         .sum()
         .sort_values(ascending=False)
     )
- 
+
     with st.container(border=True):
         st.bar_chart(city_data, color="#6366F1")
- 
+
     insight(
         "#6366F1",
         f"🏙️ Highest e-waste generating city: "
         f"<b>{city_data.idxmax()}</b>"
     )
- 
+
     section("Recycling Rate by Device")
- 
+
     recycling_data = (
         df.groupby("Device_Type")["Recycling_Rate_pct"]
         .mean()
         .sort_values(ascending=False)
     )
- 
+
     with st.container(border=True):
         st.bar_chart(recycling_data, color="#10B981")
- 
+
     section("Hazardous Material Distribution")
- 
+
     hazardous_data = (
         df["Hazardous_Material"]
         .value_counts()
     )
- 
+
     with st.container(border=True):
         st.bar_chart(hazardous_data, color="#F59E0B")
- 
- 
+
+
 # =========================================================
 # PREDICTION
 # =========================================================
- 
+
 elif page == "🔮 Prediction":
- 
+
     hero(
         "MACHINE LEARNING",
         "🔮 E-Waste Prediction",
         "Linear Regression is used to estimate future e-waste generation."
     )
- 
+
     try:
- 
+
         model = joblib.load(
             "models/linear_regression.pkl"
         )
- 
+
         yearly_data = (
             df.groupby("Financial_Year")["E_Waste_kg"]
             .sum()
             .reset_index()
         )
- 
+
         yearly_data["Year"] = (
             yearly_data["Financial_Year"]
             .str[:4]
             .astype(int)
         )
- 
+
         first_year = int(
             yearly_data["Year"].min()
         )
- 
+
         last_year = int(
             yearly_data["Year"].max()
         )
- 
+
         selected_year = st.number_input(
             "📅 Select Future Year",
             min_value=last_year + 1,
@@ -865,19 +865,19 @@ elif page == "🔮 Prediction":
             value=2030,
             step=1
         )
- 
+
         selected_input = pd.DataFrame(
             {
                 "Year": [selected_year]
             }
         )
- 
+
         selected_prediction = model.predict(
             selected_input
         )[0]
- 
+
         col1, col2 = st.columns(2)
- 
+
         with col1:
             kpi(
                 "🔮",
@@ -885,7 +885,7 @@ elif page == "🔮 Prediction":
                 f"{selected_prediction:,.2f} kg",
                 "#10B981"
             )
- 
+
         with col2:
             kpi(
                 "📅",
@@ -893,61 +893,61 @@ elif page == "🔮 Prediction":
                 f"{last_year}",
                 "#0EA5E9"
             )
- 
+
         actual = yearly_data[
             ["Year", "E_Waste_kg"]
         ].copy()
- 
+
         actual.rename(
             columns={
                 "E_Waste_kg": "Actual"
             },
             inplace=True
         )
- 
+
         prediction_years = list(
             range(
                 first_year,
                 selected_year + 1
             )
         )
- 
+
         prediction_input = pd.DataFrame(
             {
                 "Year": prediction_years
             }
         )
- 
+
         prediction_values = model.predict(
             prediction_input
         )
- 
+
         prediction = pd.DataFrame(
             {
                 "Year": prediction_years,
                 "Prediction": prediction_values
             }
         )
- 
+
         graph_data = pd.merge(
             actual,
             prediction,
             on="Year",
             how="outer"
         )
- 
+
         graph_data.sort_values(
             "Year",
             inplace=True
         )
- 
+
         graph_data.set_index(
             "Year",
             inplace=True
         )
- 
+
         section("Actual vs Prediction")
- 
+
         with st.container(border=True):
             st.line_chart(
                 graph_data[
@@ -955,13 +955,13 @@ elif page == "🔮 Prediction":
                 ],
                 color=["#0EA5E9", "#10B981"]
             )
- 
+
         st.caption(
             f"Prediction line extends to {selected_year}."
         )
- 
+
         section("Prediction Details")
- 
+
         result = pd.DataFrame(
             {
                 "Year": [selected_year],
@@ -973,97 +973,97 @@ elif page == "🔮 Prediction":
                 ]
             }
         )
- 
+
         st.dataframe(
             result,
             use_container_width=True,
             hide_index=True
         )
- 
+
     except Exception as e:
- 
+
         st.error(
             f"Prediction model error: {e}"
         )
- 
- 
+
+
 # =========================================================
 # RISK CLASSIFICATION
 # =========================================================
- 
+
 elif page == "⚠️ Risk Classification":
- 
+
     hero(
         "MACHINE LEARNING",
         "⚠️ E-Waste Risk Classification",
         "KNN classifies e-waste management risk as Low, Medium or High."
     )
- 
+
     try:
- 
+
         knn_model = joblib.load(
             "models/knn_classifier.pkl"
         )
- 
+
         scaler = joblib.load(
             "models/knn_scaler.pkl"
         )
- 
+
         section("Enter E-Waste Parameters")
- 
+
         with st.container(border=True):
- 
+
             col1, col2 = st.columns(2)
- 
+
             with col1:
- 
+
                 e_waste = st.number_input(
                     "E-Waste Generated (kg)",
                     min_value=0.0,
                     value=1000.0
                 )
- 
+
                 collection_rate = st.number_input(
                     "Collection Rate (%)",
                     min_value=0.0,
                     max_value=100.0,
                     value=70.0
                 )
- 
+
                 recycling_rate = st.number_input(
                     "Recycling Rate (%)",
                     min_value=0.0,
                     max_value=100.0,
                     value=50.0
                 )
- 
+
             with col2:
- 
+
                 disposal_rate = st.number_input(
                     "Disposal Rate (%)",
                     min_value=0.0,
                     max_value=100.0,
                     value=30.0
                 )
- 
+
                 growth_rate = st.number_input(
                     "Growth Rate (%)",
                     value=5.0
                 )
- 
+
                 hazardous_material = st.number_input(
                     "Hazardous Material (g)",
                     min_value=0.0,
                     value=100.0
                 )
- 
+
         st.write("")
- 
+
         if st.button(
             "🔍 Classify Risk",
             use_container_width=True
         ):
- 
+
             input_data = pd.DataFrame(
                 {
                     "E_Waste_kg": [e_waste],
@@ -1084,173 +1084,170 @@ elif page == "⚠️ Risk Classification":
                     ]
                 }
             )
- 
+
             scaled_input = scaler.transform(
                 input_data
             )
- 
+
             risk_prediction = knn_model.predict(
                 scaled_input
             )[0]
- 
+
             section("Risk Classification Result")
- 
+
             if risk_prediction == "Low":
- 
+
                 st.markdown(
                     '<div class="risk-box risk-low">🟢 LOW RISK</div>',
                     unsafe_allow_html=True
                 )
- 
+
             elif risk_prediction == "Medium":
- 
+
                 st.markdown(
                     '<div class="risk-box risk-medium">🟡 MEDIUM RISK</div>',
                     unsafe_allow_html=True
                 )
- 
+
             else:
- 
+
                 st.markdown(
                     '<div class="risk-box risk-high">🔴 HIGH RISK</div>',
                     unsafe_allow_html=True
                 )
- 
+
     except Exception as e:
- 
+
         st.error(
             f"Risk model error: {e}"
         )
- 
- 
+
+
 # =========================================================
 # INSIGHTS
 # =========================================================
- 
+
 elif page == "💡 Insights":
- 
+
     hero(
         "FINDINGS",
         "💡 EcoTrack Insights",
         "Key findings generated from the analyzed dataset."
     )
- 
+
     yearly = (
         df.groupby("Financial_Year")["E_Waste_kg"]
         .sum()
     )
- 
+
     highest_year = yearly.idxmax()
- 
+
     highest_value = yearly.max()
- 
+
     device = (
         df.groupby("Device_Type")["E_Waste_kg"]
         .sum()
     )
- 
+
     highest_device = device.idxmax()
- 
+
     city = (
         df.groupby("City")["E_Waste_kg"]
         .sum()
     )
- 
+
     highest_city = city.idxmax()
- 
+
     total_recycled = df["Recycled_kg"].sum()
- 
+
     total_ewaste = df["E_Waste_kg"].sum()
- 
+
     recycling_percentage = (
         total_recycled /
         total_ewaste *
         100
     )
- 
+
     section("Key Findings")
- 
+
     insight(
         "#10B981",
         f"📈 Highest e-waste generation was observed in "
         f"<b>{highest_year}</b>, with approximately "
         f"<b>{highest_value:,.0f} kg</b>."
     )
- 
+
     insight(
         "#0EA5E9",
         f"📱 <b>{highest_device}</b> generated the highest "
         f"amount of e-waste in the dataset."
     )
- 
+
     insight(
         "#6366F1",
         f"🏙️ <b>{highest_city}</b> recorded the highest "
         f"e-waste generation in the dataset."
     )
- 
+
     insight(
         "#F59E0B",
         f"♻️ Calculated recycling proportion: "
         f"<b>{recycling_percentage:.2f}%</b>."
     )
- 
+
     section("Recommendations")
- 
+
     col1, col2, col3 = st.columns(3)
- 
+
     with col1:
         info_card(
             "#10B981",
             "🏗️ Collection",
             "Improve e-waste collection infrastructure."
         )
- 
+
     with col2:
         info_card(
             "#0EA5E9",
             "♻️ Recovery",
             "Increase recycling and recovery activities."
         )
- 
+
     with col3:
         info_card(
             "#F59E0B",
             "☣️ Safety",
             "Monitor hazardous materials carefully."
         )
- 
+
     st.write("")
- 
+
     col1, col2 = st.columns(2)
- 
+
     with col1:
         info_card(
             "#6366F1",
             "📍 Hotspots",
             "Identify high e-waste generating locations."
         )
- 
+
     with col2:
         info_card(
             "#14B8A6",
             "🔮 Planning",
             "Use predictive analytics for future planning."
         )
- 
- 
+
+
 # =========================================================
 # FIXED FOOTER (stays at the bottom of the screen)
 # =========================================================
- 
+
 st.markdown(
     """
     <div class="footer">
         <div class="left">
             <div class="brand">♻️ EcoTrack</div>
-            <div class="line">E-Waste Analytics • Risk Classification • Predictive Management</div>
-        </div>
-        <div class="right">
             <div class="line">© 2026 All Rights Reserved</div>
             <div class="line">Built with ❤️ by <span class="accent">Piyush Kolhe</span></div>
         </div>
